@@ -52,7 +52,7 @@
             <!-- SECTION 1 : AIRDROP TRACKER -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <i data-lucide="parachute" class="w-5 h-5 text-baseBlue"></i> 
+                    <i data-lucide="rocket" class="w-5 h-5 text-baseBlue"></i> 
                     Statut Éligibilité Airdrop Base
                 </h2>
                 <div class="grid grid-cols-1 gap-5 sm:grid-cols-4">
@@ -62,7 +62,7 @@
                         <span class="text-xs text-slate-400 font-medium">Volume Total</span>
                         <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-vol">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-baseBlue h-1.5 rounded-full" style="width: 0%"></div>
+                            <div class="bg-baseBlue h-1.5 rounded-full" style="width: 0%" id="bar-vol"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Objectif: $20k pour Tier 1</p>
                     </div>
@@ -73,7 +73,7 @@
                         <span class="text-xs text-slate-400 font-medium">Transactions</span>
                         <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-tx">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 0%"></div>
+                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 0%" id="bar-tx"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Objectif: 100+ Tx</p>
                     </div>
@@ -84,7 +84,7 @@
                         <span class="text-xs text-slate-400 font-medium">dApps Uniques</span>
                         <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-dapps">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 0%"></div>
+                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 0%" id="bar-dapps"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Ex: Aerodrome, Uniswap, Morpho</p>
                     </div>
@@ -152,7 +152,7 @@
         
         const API_KEYS = {
             COINGECKO: "CG-BCTJauWcazgCdFZFTiBqwsPf", // Optionnel
-            BASESCAN: "Iw2Y2rsjeQKBHz4XOTNbtX", // <-- INSÈRE TA CLÉ BASESCAN ICI
+            BASESCAN: "w2Y2rsjeQKBHz4XOTNbtX", // <-- INSÈRE TA CLÉ BASESCAN ICI
             WALLET_ADDRESS: "0x27137fD1739d73bD4108a7BDF603B94F717C8C92" // <-- INSÈRE TON ADRESSE PUBLIQUE ICI (ex: 0x123...)
         };
 
@@ -231,9 +231,9 @@
                     document.getElementById('airdrop-vol').innerText = `$${volumeUsd.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
 
                     // Mise à jour barres de progression
-                    updateProgressBar(document.getElementById('airdrop-tx').nextElementSibling.firstElementChild, txCount, 100);
-                    updateProgressBar(document.getElementById('airdrop-dapps').nextElementSibling.firstElementChild, dAppsCount, 20);
-                    updateProgressBar(document.getElementById('airdrop-vol').nextElementSibling.firstElementChild, volumeUsd, 20000);
+                    updateProgressBar(document.getElementById('bar-tx'), txCount, 100);
+                    updateProgressBar(document.getElementById('bar-dapps'), dAppsCount, 20);
+                    updateProgressBar(document.getElementById('bar-vol'), volumeUsd, 20000);
                     
                     // Calcul du score
                     let score = "C";
@@ -254,6 +254,11 @@
                     
                     document.getElementById('airdrop-score').innerText = score;
                     document.getElementById('airdrop-advice').innerText = adviceText;
+                } else if (data.status === "0" && data.message === "No transactions found") {
+                     document.getElementById('airdrop-advice').innerText = "Aucune transaction trouvée pour cette adresse.";
+                     document.getElementById('airdrop-tx').innerText = "0 Tx";
+                     document.getElementById('airdrop-dapps').innerText = "0 dApps";
+                     document.getElementById('airdrop-vol').innerText = "$0";
                 }
             } catch (error) {
                 console.error("Erreur Basescan:", error);
@@ -321,7 +326,9 @@
             });
 
             document.getElementById('total-val').innerText = `$${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            lucide.createIcons();
+            
+            // On recrée les icônes ajoutées dynamiquement de manière sécurisée
+            try { lucide.createIcons(); } catch(e) {}
         }
 
         function generateAdvice(token, pnlPercent, container) {
@@ -371,22 +378,28 @@
                 <p class="text-xs text-slate-300 leading-relaxed"><strong>Astuce de farming :</strong> Assurez-vous d'utiliser le bridge officiel de Base de temps en temps, et pas seulement des bridges tiers.</p>
             `;
             container.appendChild(airdropCard);
-            lucide.createIcons();
         }
 
         async function refreshData() {
             const icon = document.getElementById('refresh-icon');
-            icon.classList.add('animate-spin');
+            if (icon) icon.classList.add('animate-spin');
+            
             await fetchRealMarketData();
-            setTimeout(() => icon.classList.remove('animate-spin'), 800);
+            
+            if (icon) setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
-        // Initialisation
+        // Sécurisation de l'initialisation : Les données d'abord !
         window.onload = () => {
-            lucide.createIcons();
             fetchRealMarketData();
-            // Actualisation automatique toutes les minutes
             setInterval(fetchRealMarketData, 60000);
+            
+            // Chargement des icônes à la fin de manière sécurisée
+            try {
+                lucide.createIcons();
+            } catch (error) {
+                console.warn("Certaines icônes n'ont pas pu se charger, mais le site fonctionne.");
+            }
         };
     </script>
 </body>
