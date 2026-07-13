@@ -49,7 +49,7 @@
         <!-- Main Content -->
         <main class="flex-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
             
-            <!-- SECTION 1 : AIRDROP TRACKER (Nouveauté) -->
+            <!-- SECTION 1 : AIRDROP TRACKER -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <i data-lucide="parachute" class="w-5 h-5 text-baseBlue"></i> 
@@ -60,9 +60,9 @@
                     <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="waves" class="w-16 h-16"></i></div>
                         <span class="text-xs text-slate-400 font-medium">Volume Total</span>
-                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-vol">$12,450</div>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-vol">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-baseBlue h-1.5 rounded-full" style="width: 62%"></div>
+                            <div class="bg-baseBlue h-1.5 rounded-full" style="width: 0%"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Objectif: $20k pour Tier 1</p>
                     </div>
@@ -71,9 +71,9 @@
                     <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="arrow-right-left" class="w-16 h-16"></i></div>
                         <span class="text-xs text-slate-400 font-medium">Transactions</span>
-                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-tx">84 Tx</div>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-tx">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 84%"></div>
+                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 0%"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Objectif: 100+ Tx</p>
                     </div>
@@ -82,9 +82,9 @@
                     <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
                         <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="file-code" class="w-16 h-16"></i></div>
                         <span class="text-xs text-slate-400 font-medium">dApps Uniques</span>
-                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-dapps">6 dApps</div>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-dapps">Scan...</div>
                         <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
-                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 40%"></div>
+                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 0%"></div>
                         </div>
                         <p class="text-[10px] text-slate-400 mt-2">Ex: Aerodrome, Uniswap, Morpho</p>
                     </div>
@@ -95,8 +95,8 @@
                             <span class="text-sm text-baseBlue font-semibold">Score Airdrop</span>
                             <i data-lucide="award" class="w-5 h-5 text-baseBlue"></i>
                         </div>
-                        <div class="text-3xl font-bold tracking-tight text-white" id="airdrop-score">B+</div>
-                        <p class="text-xs text-slate-300 mt-2 leading-tight" id="airdrop-advice">En bonne voie. Augmentez vos interactions de smart contracts.</p>
+                        <div class="text-3xl font-bold tracking-tight text-white" id="airdrop-score">?</div>
+                        <p class="text-xs text-slate-300 mt-2 leading-tight" id="airdrop-advice">Connectez votre adresse et votre clé Basescan.</p>
                     </div>
                 </div>
             </div>
@@ -151,53 +151,34 @@
         // =====================================================================
         
         const API_KEYS = {
-            COINGECKO: "CG-BCTJauWcazgCdFZFTiBqwsPf", 
-            BASESCAN: "w2Y2rsjeQKBHz4XOTNbtX", // Pour scanner les Tx et le volume Airdrop
-            WALLET_ADDRESS: "0x27137fD1739d73bD4108a7BDF603B94F717C8C92" // Ton adresse publique pour le scan
+            COINGECKO: "", // Optionnel
+            BASESCAN: "TA_CLE_API_BASESCAN_ICI", // <-- INSÈRE TA CLÉ BASESCAN ICI
+            WALLET_ADDRESS: "0x_TON_ADRESSE_BASE_ICI" // <-- INSÈRE TON ADRESSE PUBLIQUE ICI (ex: 0x123...)
         };
 
-        // Ton portefeuille sur l'écosystème Base
+        // Ton portefeuille sur l'écosystème Base (Modifie les 'balance' pour mettre tes vraies quantités)
         const MY_TOKENS = [
-            {
-                id: "ethereum", 
-                name: "Ethereum (Base)",
-                ticker: "ETH",
-                avgBuyPrice: 2800.00,
-                balance: 1.5,
-                type: "gas" // Utilisé pour payer les frais
-            },
-            {
-                id: "aerodrome-finance",
-                name: "Aerodrome",
-                ticker: "AERO",
-                avgBuyPrice: 0.55,
-                balance: 2500,
-                type: "defi"
-            },
-            {
-                id: "degen-base",
-                name: "Degen",
-                ticker: "DEGEN",
-                avgBuyPrice: 0.015,
-                balance: 100000,
-                type: "meme"
-            }
+            { id: "ethereum", name: "Ethereum (Base)", ticker: "ETH", avgBuyPrice: 2800.00, balance: 1.5, type: "gas" },
+            { id: "aerodrome-finance", name: "Aerodrome", ticker: "AERO", avgBuyPrice: 0.55, balance: 2500, type: "defi" },
+            { id: "degen-base", name: "Degen", ticker: "DEGEN", avgBuyPrice: 0.015, balance: 100000, type: "meme" }
         ];
 
         // =====================================================================
-        // 2. MOTEUR DE FETCH (REQUÊTES RÉELLES API)
+        // 2. MOTEUR DE FETCH (REQUÊTES RÉELLES API COINGECKO + BASESCAN)
         // =====================================================================
 
         async function fetchRealMarketData() {
             try {
+                // 1. Fetch des prix CoinGecko
                 const coinIds = MY_TOKENS.map(t => t.id).join(',');
-                let url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_vol=true&include_24hr_change=true`;
+                let cgUrl = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_vol=true&include_24hr_change=true`;
                 
-                const response = await fetch(url);
+                const response = await fetch(cgUrl);
                 if (!response.ok) throw new Error("Erreur API CoinGecko");
-                
                 const data = await response.json();
                 
+                let ethCurrentPrice = data['ethereum'] ? data['ethereum'].usd : 2500;
+
                 let livePortfolio = MY_TOKENS.map(token => {
                     const liveData = data[token.id];
                     return {
@@ -209,15 +190,86 @@
                 });
 
                 renderPortfolio(livePortfolio);
-                analyzeAirdropStrategy(); // Lance les conseils orientés Airdrop
+                analyzeAirdropStrategy();
+
+                // 2. Lancement du Scan de ton Wallet via Basescan
+                if (API_KEYS.WALLET_ADDRESS.startsWith("0x") && API_KEYS.BASESCAN !== "") {
+                    await fetchBasescanData(ethCurrentPrice);
+                } else {
+                    document.getElementById('airdrop-advice').innerText = "Veuillez configurer votre adresse et clé Basescan dans le code.";
+                }
 
             } catch (error) {
                 console.error("Erreur Fetch API:", error);
             }
         }
 
+        async function fetchBasescanData(ethPrice) {
+            try {
+                const url = `https://api.basescan.org/api?module=account&action=txlist&address=${API_KEYS.WALLET_ADDRESS}&apikey=${API_KEYS.BASESCAN}&sort=asc`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.status === "1" && data.message === "OK") {
+                    const txs = data.result;
+                    
+                    const txCount = txs.length;
+                    const uniqueAddresses = new Set();
+                    let totalEthVolume = 0;
+
+                    txs.forEach(tx => {
+                        if (tx.to !== "") uniqueAddresses.add(tx.to);
+                        totalEthVolume += (parseFloat(tx.value) / 1e18);
+                    });
+
+                    const dAppsCount = uniqueAddresses.size;
+                    const volumeUsd = totalEthVolume * ethPrice;
+
+                    // Mise à jour interface
+                    document.getElementById('airdrop-tx').innerText = `${txCount} Tx`;
+                    document.getElementById('airdrop-dapps').innerText = `${dAppsCount} dApps`;
+                    document.getElementById('airdrop-vol').innerText = `$${volumeUsd.toLocaleString(undefined, {maximumFractionDigits: 0})}`;
+
+                    // Mise à jour barres de progression
+                    updateProgressBar(document.getElementById('airdrop-tx').nextElementSibling.firstElementChild, txCount, 100);
+                    updateProgressBar(document.getElementById('airdrop-dapps').nextElementSibling.firstElementChild, dAppsCount, 20);
+                    updateProgressBar(document.getElementById('airdrop-vol').nextElementSibling.firstElementChild, volumeUsd, 20000);
+                    
+                    // Calcul du score
+                    let score = "C";
+                    let adviceText = "Continuez d'interagir avec le réseau pour construire votre historique.";
+                    
+                    if (txCount > 50 && dAppsCount > 5) {
+                        score = "B+";
+                        adviceText = "En bonne voie. Diversifiez vos interactions (DEX, Lending, NFT).";
+                    }
+                    if (txCount > 100 && dAppsCount > 10 && volumeUsd > 10000) {
+                        score = "A";
+                        adviceText = "Excellent profil. Maintenez une activité mensuelle régulière.";
+                    }
+                    if (txCount > 200 && dAppsCount > 20 && volumeUsd > 50000) {
+                        score = "S";
+                        adviceText = "Profil Sybil-proof Tier 1. Vous êtes idéalement positionné.";
+                    }
+                    
+                    document.getElementById('airdrop-score').innerText = score;
+                    document.getElementById('airdrop-advice').innerText = adviceText;
+                }
+            } catch (error) {
+                console.error("Erreur Basescan:", error);
+                document.getElementById('airdrop-advice').innerText = "Erreur de connexion à Basescan.";
+            }
+        }
+
+        function updateProgressBar(element, current, max) {
+            if(!element) return;
+            let percentage = (current / max) * 100;
+            if (percentage > 100) percentage = 100;
+            element.style.width = `${percentage}%`;
+        }
+
         // =====================================================================
-        // 3. LOGIQUE D'AFFICHAGE ET CONSEILS (FOCUS AIRDROP)
+        // 3. LOGIQUE D'AFFICHAGE ET CONSEILS (PORTFOLIO)
         // =====================================================================
 
         function renderPortfolio(liveData) {
@@ -226,7 +278,6 @@
             
             tbody.innerHTML = '';
             adviceContainer.innerHTML = '';
-
             let totalValue = 0;
 
             liveData.forEach(token => {
@@ -266,8 +317,6 @@
                     </td>
                 `;
                 tbody.appendChild(tr);
-
-                // Génération des conseils pour chaque token
                 generateAdvice(token, pnlPercent, adviceContainer);
             });
 
@@ -284,22 +333,22 @@
             if (pnlPercent > 50) {
                 borderClass = "border-l-emerald-500";
                 actionBadge = `<span class="text-[10px] text-emerald-400 font-bold font-mono border border-emerald-500/30 px-1.5 py-0.5 rounded">TAKE PROFIT</span>`;
-                text = `Beau gain sur ${token.ticker} (+${pnlPercent.toFixed(0)}%). Vendez 20% en USDC sur Uniswap (Base) ou Aerodrome : cela générera un volume de swap parfait pour l'Airdrop.`;
+                text = `Beau gain sur ${token.ticker} (+${pnlPercent.toFixed(0)}%). Vendez 20% en USDC sur Uniswap ou Aerodrome : cela générera un volume de swap parfait pour l'Airdrop.`;
             } else if (pnlPercent < -20) {
                 borderClass = "border-l-rose-500";
                 actionBadge = `<span class="text-[10px] text-rose-400 font-bold font-mono border border-rose-500/30 px-1.5 py-0.5 rounded">DCA / REVIEW</span>`;
-                text = `${token.ticker} est en baisse de ${Math.abs(pnlPercent).toFixed(0)}%. Si le token a un cas d'usage sur Base, vous pouvez faire un micro-swap de renforcement pour ajouter une transaction (Tx) à votre farming.`;
+                text = `${token.ticker} est en baisse de ${Math.abs(pnlPercent).toFixed(0)}%. Si le token a un cas d'usage sur Base, faites un micro-swap de renforcement pour ajouter une transaction à votre farming.`;
             } else {
                 borderClass = "border-l-baseBlue";
                 actionBadge = `<span class="text-[10px] text-baseBlue font-bold font-mono border border-baseBlue/30 px-1.5 py-0.5 rounded">FARMING</span>`;
                 if (token.ticker === "ETH") {
-                    text = `Gardez votre ETH pour le gas. Conseil Airdrop : placez une petite fraction en Liquid Staking (ex: wstETH) sur Base pour interagir avec un nouveau contrat.`;
+                    text = `Gardez votre ETH pour le gas. Conseil Airdrop : placez une petite fraction en Liquid Staking sur Base pour interagir avec un nouveau contrat.`;
                 } else {
-                    text = `Position stable. Pensez à fournir de la liquidité (LP) avec vos ${token.ticker} sur Aerodrome pour maximiser votre score d'airdrop.`;
+                    text = `Position stable. Pensez à fournir de la liquidité (LP) avec vos ${token.ticker} sur Aerodrome.`;
                 }
             }
 
-            adviceCard.className = `bg-slate-900/40 p-4 rounded-xl border border-slate-800 border-l-4 ${borderClass} space-y-2`;
+            adviceCard.className = `bg-slate-900/40 p-4 rounded-xl border border-slate-800 border-l-4 ${borderClass} space-y-2 mb-4`;
             adviceCard.innerHTML = `
                 <div class="flex items-center justify-between">
                     <span class="font-bold text-white text-sm">${token.ticker}</span>
@@ -312,16 +361,14 @@
 
         function analyzeAirdropStrategy() {
             const container = document.getElementById('advice-container');
-            
-            // Conseil global spécifique à l'airdrop ajouté en fin de liste
             let airdropCard = document.createElement('div');
             airdropCard.className = `bg-baseBlue/5 p-4 rounded-xl border border-baseBlue/30 border-l-4 border-l-baseBlue space-y-2 mt-4`;
             airdropCard.innerHTML = `
                 <div class="flex items-center justify-between">
-                    <span class="font-bold text-white text-sm flex items-center gap-2"><i data-lucide="target" class="w-4 h-4"></i> Objectif Base</span>
+                    <span class="font-bold text-white text-sm flex items-center gap-2"><i data-lucide="target" class="w-4 h-4"></i> Méta Airdrop</span>
                     <span class="text-[10px] text-baseBlue font-bold font-mono border border-baseBlue/30 px-1.5 py-0.5 rounded bg-baseBlue/10">PRIORITÉ</span>
                 </div>
-                <p class="text-xs text-slate-300 leading-relaxed"><strong>Action requise :</strong> Vous n'avez interagi qu'avec 6 dApps. Pour le top tier de l'airdrop, utilisez des protocoles comme Seamless Protocol, Moonwell ou frappez un NFT sur Zora via Base.</p>
+                <p class="text-xs text-slate-300 leading-relaxed"><strong>Astuce de farming :</strong> Assurez-vous d'utiliser le bridge officiel de Base de temps en temps, et pas seulement des bridges tiers.</p>
             `;
             container.appendChild(airdropCard);
             lucide.createIcons();
@@ -330,12 +377,7 @@
         async function refreshData() {
             const icon = document.getElementById('refresh-icon');
             icon.classList.add('animate-spin');
-            
             await fetchRealMarketData();
-            
-            // Ici, plus tard, on appellera l'API Basescan pour mettre à jour les Tx et le Volume
-            // ex: fetch(`https://api.basescan.org/api?module=account&action=txlist&address=${API_KEYS.WALLET_ADDRESS}&apikey=${API_KEYS.BASESCAN}`)
-            
             setTimeout(() => icon.classList.remove('animate-spin'), 800);
         }
 
@@ -343,6 +385,7 @@
         window.onload = () => {
             lucide.createIcons();
             fetchRealMarketData();
+            // Actualisation automatique toutes les minutes
             setInterval(fetchRealMarketData, 60000);
         };
     </script>
