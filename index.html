@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-950 text-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Airdrop & Portfolio Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        baseBlue: '#0052FF',
+                        darkBg: '#090D16',
+                        cardBg: '#131B2E',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full font-sans antialiased bg-darkBg">
+
+    <div class="min-h-full flex flex-col">
+        <!-- Navbar -->
+        <header class="border-b border-slate-800 bg-cardBg/50 backdrop-blur sticky top-0 z-40">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-baseBlue p-2 rounded-lg text-white shadow-[0_0_15px_rgba(0,82,255,0.5)]">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <span class="text-lg font-bold tracking-tight text-white flex items-center gap-2">
+                                Base Airdrop Farmer
+                            </span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="refreshData()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors border border-slate-700">
+                            <i data-lucide="refresh-cw" class="w-4 h-4" id="refresh-icon"></i> Scan Wallet
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 w-full">
+            
+            <!-- SECTION 1 : AIRDROP TRACKER (Nouveauté) -->
+            <div class="mb-8">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="parachute" class="w-5 h-5 text-baseBlue"></i> 
+                    Statut Éligibilité Airdrop Base
+                </h2>
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-4">
+                    <!-- Volume -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="waves" class="w-16 h-16"></i></div>
+                        <span class="text-xs text-slate-400 font-medium">Volume Total</span>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-vol">$12,450</div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
+                            <div class="bg-baseBlue h-1.5 rounded-full" style="width: 62%"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2">Objectif: $20k pour Tier 1</p>
+                    </div>
+
+                    <!-- Transactions -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="arrow-right-left" class="w-16 h-16"></i></div>
+                        <span class="text-xs text-slate-400 font-medium">Transactions</span>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-tx">84 Tx</div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
+                            <div class="bg-emerald-400 h-1.5 rounded-full" style="width: 84%"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2">Objectif: 100+ Tx</p>
+                    </div>
+
+                    <!-- Contrats Uniques -->
+                    <div class="bg-cardBg p-5 rounded-2xl border border-slate-800 shadow-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="file-code" class="w-16 h-16"></i></div>
+                        <span class="text-xs text-slate-400 font-medium">dApps Uniques</span>
+                        <div class="text-2xl font-bold tracking-tight mt-1" id="airdrop-dapps">6 dApps</div>
+                        <div class="w-full bg-slate-800 rounded-full h-1.5 mt-3">
+                            <div class="bg-amber-400 h-1.5 rounded-full" style="width: 40%"></div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2">Ex: Aerodrome, Uniswap, Morpho</p>
+                    </div>
+
+                    <!-- Score Global -->
+                    <div class="bg-gradient-to-br from-baseBlue/20 to-cardBg p-5 rounded-2xl border border-baseBlue/50 shadow-[0_0_20px_rgba(0,82,255,0.1)]">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-baseBlue font-semibold">Score Airdrop</span>
+                            <i data-lucide="award" class="w-5 h-5 text-baseBlue"></i>
+                        </div>
+                        <div class="text-3xl font-bold tracking-tight text-white" id="airdrop-score">B+</div>
+                        <p class="text-xs text-slate-300 mt-2 leading-tight" id="airdrop-advice">En bonne voie. Augmentez vos interactions de smart contracts.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2 : PORTFOLIO ÉCOSYSTÈME BASE -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Tableau des Actifs -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-cardBg rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+                        <div class="px-6 py-5 border-b border-slate-800 bg-slate-900/50 flex justify-between items-center">
+                            <h2 class="text-base font-semibold text-white">Actifs sur Base Network</h2>
+                            <div class="text-sm font-medium text-slate-200 flex items-center gap-2">
+                                <i data-lucide="wallet" class="w-4 h-4 text-slate-400"></i> Total: <span id="total-val" class="text-emerald-400">Chargement...</span>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-800 text-slate-400 text-xs font-semibold tracking-wider bg-slate-900/20">
+                                        <th class="py-4 px-6">Token</th>
+                                        <th class="py-4 px-6">Prix Moyen / Actuel</th>
+                                        <th class="py-4 px-6">Solde / Valeur</th>
+                                        <th class="py-4 px-6 text-right">PnL</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="portfolio-table-body" class="divide-y divide-slate-800/60 text-sm">
+                                    <!-- Injecté par JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panneau de Conseils -->
+                <div class="space-y-6">
+                    <div class="bg-cardBg rounded-2xl border border-slate-800 shadow-xl p-6 flex flex-col h-full">
+                        <h2 class="text-base font-semibold text-white flex items-center gap-2 mb-4 pb-4 border-b border-slate-800">
+                            <i data-lucide="brain" class="w-5 h-5 text-amber-400"></i> Stratégie & Farming
+                        </h2>
+                        <div class="space-y-4 flex-1 overflow-y-auto" id="advice-container">
+                            <!-- Injecté par JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // =====================================================================
+        // 1. CLÉS API & CONFIGURATION (100% BASE)
+        // =====================================================================
+        
+        const API_KEYS = {
+            COINGECKO: "CG-BCTJauWcazgCdFZFTiBqwsPf", 
+            BASESCAN: "p4VwvqxWwBmS2d0Qq6_ct", // Pour scanner les Tx et le volume Airdrop
+            WALLET_ADDRESS: "0x27137fD1739d73bD4108a7BDF603B94F717C8C92" // Ton adresse publique pour le scan
+        };
+
+        // Ton portefeuille sur l'écosystème Base
+        const MY_TOKENS = [
+            {
+                id: "ethereum", 
+                name: "Ethereum (Base)",
+                ticker: "ETH",
+                avgBuyPrice: 2800.00,
+                balance: 1.5,
+                type: "gas" // Utilisé pour payer les frais
+            },
+            {
+                id: "aerodrome-finance",
+                name: "Aerodrome",
+                ticker: "AERO",
+                avgBuyPrice: 0.55,
+                balance: 2500,
+                type: "defi"
+            },
+            {
+                id: "degen-base",
+                name: "Degen",
+                ticker: "DEGEN",
+                avgBuyPrice: 0.015,
+                balance: 100000,
+                type: "meme"
+            }
+        ];
+
+        // =====================================================================
+        // 2. MOTEUR DE FETCH (REQUÊTES RÉELLES API)
+        // =====================================================================
+
+        async function fetchRealMarketData() {
+            try {
+                const coinIds = MY_TOKENS.map(t => t.id).join(',');
+                let url = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_vol=true&include_24hr_change=true`;
+                
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Erreur API CoinGecko");
+                
+                const data = await response.json();
+                
+                let livePortfolio = MY_TOKENS.map(token => {
+                    const liveData = data[token.id];
+                    return {
+                        ...token,
+                        currentPrice: liveData ? liveData.usd : 0,
+                        volume24h: liveData ? liveData.usd_24h_vol : 0,
+                        priceChange24h: liveData ? liveData.usd_24h_change : 0
+                    };
+                });
+
+                renderPortfolio(livePortfolio);
+                analyzeAirdropStrategy(); // Lance les conseils orientés Airdrop
+
+            } catch (error) {
+                console.error("Erreur Fetch API:", error);
+            }
+        }
+
+        // =====================================================================
+        // 3. LOGIQUE D'AFFICHAGE ET CONSEILS (FOCUS AIRDROP)
+        // =====================================================================
+
+        function renderPortfolio(liveData) {
+            const tbody = document.getElementById('portfolio-table-body');
+            const adviceContainer = document.getElementById('advice-container');
+            
+            tbody.innerHTML = '';
+            adviceContainer.innerHTML = '';
+
+            let totalValue = 0;
+
+            liveData.forEach(token => {
+                const currentVal = token.balance * token.currentPrice;
+                const cost = token.balance * token.avgBuyPrice;
+                const pnl = currentVal - cost;
+                const pnlPercent = cost > 0 ? ((token.currentPrice - token.avgBuyPrice) / token.avgBuyPrice) * 100 : 0;
+                
+                totalValue += currentVal;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-900/40 transition-colors";
+                tr.innerHTML = `
+                    <td class="py-4 px-6 font-medium text-white">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-bold text-slate-100">${token.name}</span>
+                            <span class="text-xs text-slate-400 font-mono">${token.ticker}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 font-mono text-xs text-slate-300">
+                        <div class="flex flex-col">
+                            <span>Achat: $${token.avgBuyPrice < 1 ? token.avgBuyPrice.toFixed(4) : token.avgBuyPrice.toLocaleString()}</span>
+                            <span class="text-slate-400 text-[11px]">Prix: $${token.currentPrice < 1 ? token.currentPrice.toFixed(4) : token.currentPrice.toLocaleString()}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 font-mono text-xs text-slate-300">
+                        <div class="flex flex-col">
+                            <span>${token.balance.toLocaleString()}</span>
+                            <span class="text-slate-400 font-bold">$${currentVal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                        </div>
+                    </td>
+                    <td class="py-4 px-6 text-right font-mono text-xs ${pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
+                        <div class="flex flex-col items-end">
+                            <span class="font-bold">${pnl >= 0 ? '+' : ''}${pnlPercent.toFixed(2)}%</span>
+                            <span class="text-[11px] opacity-80">${pnl >= 0 ? '+' : ''}$${pnl.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+
+                // Génération des conseils pour chaque token
+                generateAdvice(token, pnlPercent, adviceContainer);
+            });
+
+            document.getElementById('total-val').innerText = `$${totalValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            lucide.createIcons();
+        }
+
+        function generateAdvice(token, pnlPercent, container) {
+            let adviceCard = document.createElement('div');
+            let borderClass = "border-l-slate-500";
+            let actionBadge = "";
+            let text = "";
+
+            if (pnlPercent > 50) {
+                borderClass = "border-l-emerald-500";
+                actionBadge = `<span class="text-[10px] text-emerald-400 font-bold font-mono border border-emerald-500/30 px-1.5 py-0.5 rounded">TAKE PROFIT</span>`;
+                text = `Beau gain sur ${token.ticker} (+${pnlPercent.toFixed(0)}%). Vendez 20% en USDC sur Uniswap (Base) ou Aerodrome : cela générera un volume de swap parfait pour l'Airdrop.`;
+            } else if (pnlPercent < -20) {
+                borderClass = "border-l-rose-500";
+                actionBadge = `<span class="text-[10px] text-rose-400 font-bold font-mono border border-rose-500/30 px-1.5 py-0.5 rounded">DCA / REVIEW</span>`;
+                text = `${token.ticker} est en baisse de ${Math.abs(pnlPercent).toFixed(0)}%. Si le token a un cas d'usage sur Base, vous pouvez faire un micro-swap de renforcement pour ajouter une transaction (Tx) à votre farming.`;
+            } else {
+                borderClass = "border-l-baseBlue";
+                actionBadge = `<span class="text-[10px] text-baseBlue font-bold font-mono border border-baseBlue/30 px-1.5 py-0.5 rounded">FARMING</span>`;
+                if (token.ticker === "ETH") {
+                    text = `Gardez votre ETH pour le gas. Conseil Airdrop : placez une petite fraction en Liquid Staking (ex: wstETH) sur Base pour interagir avec un nouveau contrat.`;
+                } else {
+                    text = `Position stable. Pensez à fournir de la liquidité (LP) avec vos ${token.ticker} sur Aerodrome pour maximiser votre score d'airdrop.`;
+                }
+            }
+
+            adviceCard.className = `bg-slate-900/40 p-4 rounded-xl border border-slate-800 border-l-4 ${borderClass} space-y-2`;
+            adviceCard.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-sm">${token.ticker}</span>
+                    ${actionBadge}
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed">${text}</p>
+            `;
+            container.appendChild(adviceCard);
+        }
+
+        function analyzeAirdropStrategy() {
+            const container = document.getElementById('advice-container');
+            
+            // Conseil global spécifique à l'airdrop ajouté en fin de liste
+            let airdropCard = document.createElement('div');
+            airdropCard.className = `bg-baseBlue/5 p-4 rounded-xl border border-baseBlue/30 border-l-4 border-l-baseBlue space-y-2 mt-4`;
+            airdropCard.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-white text-sm flex items-center gap-2"><i data-lucide="target" class="w-4 h-4"></i> Objectif Base</span>
+                    <span class="text-[10px] text-baseBlue font-bold font-mono border border-baseBlue/30 px-1.5 py-0.5 rounded bg-baseBlue/10">PRIORITÉ</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed"><strong>Action requise :</strong> Vous n'avez interagi qu'avec 6 dApps. Pour le top tier de l'airdrop, utilisez des protocoles comme Seamless Protocol, Moonwell ou frappez un NFT sur Zora via Base.</p>
+            `;
+            container.appendChild(airdropCard);
+            lucide.createIcons();
+        }
+
+        async function refreshData() {
+            const icon = document.getElementById('refresh-icon');
+            icon.classList.add('animate-spin');
+            
+            await fetchRealMarketData();
+            
+            // Ici, plus tard, on appellera l'API Basescan pour mettre à jour les Tx et le Volume
+            // ex: fetch(`https://api.basescan.org/api?module=account&action=txlist&address=${API_KEYS.WALLET_ADDRESS}&apikey=${API_KEYS.BASESCAN}`)
+            
+            setTimeout(() => icon.classList.remove('animate-spin'), 800);
+        }
+
+        // Initialisation
+        window.onload = () => {
+            lucide.createIcons();
+            fetchRealMarketData();
+            setInterval(fetchRealMarketData, 60000);
+        };
+    </script>
+</body>
+</html>
